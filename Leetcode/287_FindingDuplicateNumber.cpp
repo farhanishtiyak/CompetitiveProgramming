@@ -1,6 +1,10 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// this logic will work only while the maximum number in array can be 'N' and array size N+1;
+//  Example input: 
+// Input: nums = [1,3,4,2,2]
+// Output: 2
 
 class Solution {
 public:
