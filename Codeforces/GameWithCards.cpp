@@ -13,7 +13,6 @@ void solution ()
     {
         int x;
         cin>>x;
-        //if(x>alice) alice=x;
         v.push_back(x);
     }
     int m;
@@ -22,7 +21,6 @@ void solution ()
     {
         int x;
         cin>>x;
-        //if(x>bob) bob=x;
         vec.push_back(x);
     }
     int a = *max_element(v.begin(),v.end());
