@@ -19,7 +19,7 @@ void gamerHemos()
     int x =*(v.end()-1);
     int y =*(v.end()-2);
     int ans = (k/(x+y)); 
-    int difference = k-ans;
+    int difference = k-(ans*(x+y));
     ans = ans*2;
     if(difference==0)cout<<ans<<endl;
     else if(difference>x)cout<<(ans+2)<<endl;
