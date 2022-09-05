@@ -44,8 +44,7 @@ int main()
                 swap(arr[i], arr[j]);
                 i++;
                 sort(arr[j], arr[len1+len2]);
-                j++;
-                
+                j++;    
             }
             else 
             {
