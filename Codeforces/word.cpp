@@ -33,5 +33,4 @@ int main()
         }
         cout<<endl;
     }
-    cout<<up<<" "<<low;
 }
