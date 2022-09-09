@@ -10,7 +10,7 @@ int main()
     while(t--)
     {
         int r,n;
-        cin>>r>>n;
+        cin>>n>>r;
         if(r==n)cout<<"ANY"<<endl;
         else if(n>r) cout<<"NEW PHONE"<<endl;
         else cout<<"REPAIR"<<endl;

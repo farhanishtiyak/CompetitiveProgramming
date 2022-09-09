@@ -4,7 +4,7 @@ using namespace std;
 void solve()
 {
     int n, k, i, sum = 0;
-    cin >> a >> b;
+    cin >> n >> k;
     for (i = 1; i < k; i++)
     {
         sum =sum+ i;
