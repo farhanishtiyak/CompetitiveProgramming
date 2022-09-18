@@ -1,24 +1,24 @@
+// Problem Link: https://codeforces.com/problemset/problem/1613/A
+
 #include<bits/stdc++.h>
 using namespace std;
 
+void longComparison()
+{
+        double a,b,c,d;
+        cin>>a>>b>>c>>d;
+        double ans = a/b;
+        ans = ans*pow(10,(a-b));
+        if(ans>1) cout<<">"<<endl;
+        else if(ans<1) cout<<"<"<<endl;
+        else cout<<"="<<endl;
+}
 int main()
 {
     int t;
     cin>>t;
     while(t--)
     {
-        unsigned long long int a,b,c,d;
-        unsigned long long int x;
-        unsigned long long int y;
-        cin>>a>>b>>c>>d;
-        long long int mini = min(b,d);
-        b-=mini;
-        d-=mini;
-        for(int i=0; i<b; i++) a*=10;
-        for(int i=0; i<d; i++) c*=10;
-
-        if(x>y) cout<<">"<<endl;
-        else if(x<y)cout<<"<"<<endl;
-        else cout<<"="<<endl;
+        longComparison();
     }
 }
