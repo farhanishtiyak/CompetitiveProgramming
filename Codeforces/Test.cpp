@@ -16,9 +16,7 @@ using namespace std;
 
 void solution()
 {
-    ll a,b;
-    cin>>a>>b;
-    cout<<a+b<<endl;
+    
 }
 int main()
 {
