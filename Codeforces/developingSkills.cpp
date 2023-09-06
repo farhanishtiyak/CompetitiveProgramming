@@ -42,56 +42,86 @@ ll pwr(ll a, ll b) {a %= mod; ll res = 1; while (b > 0) {if (b & 1) res = (res *
 
 void solution()
 {
-	int x, y, n;
-	cin >> x >> y >> n;
+	int n, k;
+	cin >> n >> k;
 
-	if(n==2){
-		if(y>x) cout<<x<<" "<<y<<endl;
-		else cout<<-1<<endl;
+	priority_queue<int, vector<int> , greater<int> > minPq;
+	priority_queue<pii, vector<pii> , greater<pii> > maxPq;
 
-		return;
+	for (int i = 0; i < n; i++) {
+		int x;
+		cin >> x;
+		if (x % 10 == 0) {
+			maxPq.push({0, x});
+		}
+		else {
+			int q = x / 10;
+			int newX = (q + 1) * 10;
+			int diff = newX - x;
+			maxPq.push({diff, x});
+		}
 	}
 
-	int arr[n];
-	arr[0] = x;
-	arr[n - 1] = y;
+	// while (!maxPq.empty()) {
+	// 	cout << maxPq.top().second << " " << maxPq.top().first << endl;
+	// 	maxPq.pop();
+	// }
 
-	int inc = 1;
+	while (!maxPq.empty()) {
 
-	for (int i = n - 2; i >= 1; i--) {
-		arr[i] = arr[i + 1] - inc;
+		pii cur = maxPq.top();
+		maxPq.pop();
 
-		inc++;
-	}
-
-
-	bool f = true;
-	for (int i = 1; i < n; i++) {
-		if (arr[i] < arr[i - 1]) {
-			cout << -1 << endl;
-			return;
+		if (cur.first == 0) {
+			minPq.push(cur.second);
 		}
 
-	}
-
-	for (int i = 1; i < n-1; i++) {
-		int back = arr[i]-arr[i-1];
-		int front = arr[i+1]-arr[i];
-
-		if(front>=back){
-			cout<<-1<<endl;
-			return;
+		else {
+			int diff = cur.first;
+			if (k <= diff) {
+				cur.second += k;
+				k = 0;
+				minPq.push(cur.second);
+			}
+			else {
+				minPq.push((cur.second + diff));
+				k -= diff;
+			}
 		}
-		
 	}
 
-	for (auto it : arr) cout << it << " ";
-	cout << endl;
+	// while (!minPq.empty()) {
+	// 	cout << minPq.top() << " ";
+	// 	minPq.pop();
+	// }
+	// cout << endl;
+
+
+	ll ans = 0;
+
+	while (!minPq.empty()) {
+		int cur = minPq.top();
+		minPq.pop();
+		int rem = 100 - cur;
+		if (k <= rem) {
+			cur += k;
+			ans += (cur / 10);
+			k = 0;
+		}
+		else {
+			k -= rem;
+			ans += 10;
+		}
+	}
+
+	cout << ans << endl;
 
 }
 
 int main()
 {
 	Sezar;
-	tc(t) solution();
+	// tc(t) solution();
+	solution();
 }
+
