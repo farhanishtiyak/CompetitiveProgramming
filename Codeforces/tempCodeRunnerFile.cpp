@@ -1,2 +1,2 @@
-
-    int ct=0;
+cout<<low<<endl;
+	cou
