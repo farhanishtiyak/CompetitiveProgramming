@@ -50,68 +50,25 @@ ll pwr(ll a, ll b) {a %= mod; ll res = 1; while (b > 0) {if (b & 1) res = (res *
 
 void solution()
 {
-	int n;
-	cin >> n;
-	// for (int i = 0; i < n; i++) {
-	// 	int x;
-	// 	cin >> x;
-	// 	bitset<6> num(x);
-	// 	cout << x << "  :  ";
-	// 	cout << num << endl;
-	// }
-
-	// int n;
-	// //vector<int> arr;
-
-	// Prefix sum of bits
-	vector<vector<int>> sum(32, vector<int>(n + 1, 0));
-	for0(i, n) {
-		int x;
-		cin >> x;
-		bitset<32> num(x);
-		for (int j = 0; j < 32; j++) {
-			if (num[j] == 1) sum[j][i + 1] = sum[j][i] + 1;
-			else sum[j][i + 1] = sum[j][i];
-		}
-	}
-
-	int q;
-	cin>>q;
-	while(q--){
-		int l,k;
-		cin>>l>>k;
-
-		int low = l, high = n, ans = -1;
-		while(low<=high){
-			int mid = (low+high)/2;
-			bitset<32> curNum;
-			for(int i=0; i<32; i++){
-                // cout<<" i: "<<i<<endl;
-                // cout<<"Low: "<<low<<"  mid: "<<mid<<"  high: "<<high<<endl;
-				int noOfOnes = sum[i][mid]-sum[i][l-1];
-				if(noOfOnes==(mid-l+1)) curNum[i] = 1;
-                // cout<<"NO of Ones : "<<noOfOnes<<endl;
-                // cout<<"curNum["<<i<<"]: "<<curNum[i]<<endl;
-                // cout<<endl;
-			}
-			int num = curNum.to_ulong();
-			if(num>=k){
-				ans = max(ans, mid);
-				low = mid+1;
-			}
-			else high = mid-1;
-            // cout<<"Cur Num: "<<num<<endl;
-            // cout<<"Low: "<<low<<"  mid: "<<mid<<"  high: "<<high<<endl;
-		}
-		cout<<ans<<" ";
-	}
-    cout<<endl;
+   int n;
+   cin>>n;
+   string s;
+   cin>>s;
+   int yess = 0, cnt=0;
+   for0(i,n){
+    if(s[i]=='8'){
+        yess= 1;
+        break;
+    }
+    else cnt++;
+   }
+    if(yess==1 and (n-cnt>=11)) cout<<"YES"<<endl;
+    else cout<<"NO"<<endl;
 }
 
 int main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    tc(t) solution();
+    // solution();
 }
-
