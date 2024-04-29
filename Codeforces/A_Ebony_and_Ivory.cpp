@@ -47,74 +47,47 @@ ll ceil_div(ll a, ll b) {return a % b == 0 ? a / b : a / b + 1;}
 
 ll pwr(ll a, ll b) {a %= mod; ll res = 1; while (b > 0) {if (b & 1) res = (res * a) % mod; a = (a * a ) % mod; b >>= 1;} return res;}
 
+vector<int> GCD(int a, int b){
+    if(b==0)
+        return {1, 0, a};
+
+    vector<int> res = GCD(b, a % b);
+    int x = res[0];
+    int y = res[1];
+    int gcd = res[2];
+
+    int X = y;
+    int Y = x - ((a / b) * y);
+    return {X, Y, gcd};
+}
 
 void solution()
 {
-	int n;
-	cin >> n;
-	int x[n + 1], y[n + 1], z[n + 1];
-	int a[n + 1], b[n + 1], c[n + 1];
-	int d[n + 1], e[n + 1], f[n + 1];
-	a[0] = 0;
-	b[0] = 0;
-	c[0] = 0;
-	for (int i = 1; i <= n; i++) {
-		int h;
-		cin >> h;
-		x[i] = h;
-		a[i] = max(a[i - 1], h);
-	}
-
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
-		y[i] = x;
-		b[i] = max(b[i - 1], x);
-	}
-
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
-		z[i] = x;
-		c[i] = max(c[i - 1], x);
-	}
-
-	d[n] = x[n];
-	e[n] = y[n];
-	f[n] = z[n];
-	for (int i = n - 1; i >= 1; i--) {
-		d[i] = max(d[i + 1], x[i]);
-		e[i] = max(e[i + 1], y[i]);
-		f[i] = max(f[i + 1], z[i]);
-	}
-
-	// for (auto i : a) cout << i << " ";
-	// cout << endl;
-	
-	for (auto i : b) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	for (auto i : c) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	cout << "-------------------" << endl;
-	for (auto i : e) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	for (auto i : f) cout << i << " ";
-	cout << endl;
-
-	int ans = INT_MIN;
-	for (int i = 2; i < n; i++) {
-		int res = a[i] + max(e[i + 1], b[i - 1]) + max(f[i + 1], c[i - 1]);
-		ans = max(ans, res);
-	}
-	cout << ans << endl;
+    int a, b, c;
+    cin >> a >> b >> c;
+    int gcd = __gcd(a, b);
+    vector<int> res = GCD(a, b);
+    
+    if(c%gcd==0)
+    {
+        int k = c / gcd;
+        res[0] *= k;
+        res[1] *= k;
+        cout << res[0] << " " << res[1] << endl;
+        if(res[0]>=0 and res[1]>=0){
+            cout << "Yes" << endl;
+        }
+        else{
+            cout << "No" << endl;
+        }
+    }
+    else
+        cout << "No" << endl;
 }
 
 int main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    // tc(t) solution();
+    solution();
 }

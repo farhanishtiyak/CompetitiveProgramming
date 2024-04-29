@@ -50,71 +50,71 @@ ll pwr(ll a, ll b) {a %= mod; ll res = 1; while (b > 0) {if (b & 1) res = (res *
 
 void solution()
 {
-	int n;
-	cin >> n;
-	int x[n + 1], y[n + 1], z[n + 1];
-	int a[n + 1], b[n + 1], c[n + 1];
-	int d[n + 1], e[n + 1], f[n + 1];
-	a[0] = 0;
-	b[0] = 0;
-	c[0] = 0;
-	for (int i = 1; i <= n; i++) {
-		int h;
-		cin >> h;
-		x[i] = h;
-		a[i] = max(a[i - 1], h);
-	}
+    int n, k;
+    cin>>n>>k;
+    string s;
+    cin>>s;
+    map<char, int> m;
+    for (int i = 0; i < s.size(); i++) m[s[i]]++;
+    vector<int> even, odd;
+    for(auto it: m){
+        if(it.second & 1) odd.pb(it.second);
+        else even.pb(it.second);
+    }
+    int cnt = 0;
+    for(auto it: odd){
+        if(cnt<k) {
+            cnt++;
+            it--;
+        }
+    }
+    for(auto it: odd){
+        if(it&1) {
+           continue;
+        }
+        else{
+            even.pb(it);
+            it = 0;
+        }
+    }
 
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
-		y[i] = x;
-		b[i] = max(b[i - 1], x);
-	}
+    int len = n-k;
+    int ff = 0;
+    if(len&1){
+        for(auto it: odd){
+            if(it&1 and ff ==0){
+                ff = 1;
+                even.pb(it-1);
+                len--;
+            }
+        }
+    }
 
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
-		z[i] = x;
-		c[i] = max(c[i - 1], x);
-	}
+    for(auto it: odd){
+        if(it&1 and cnt<k) {
+            cnt++;
+            even.pb(it-1);
+        }
+    }
 
-	d[n] = x[n];
-	e[n] = y[n];
-	f[n] = z[n];
-	for (int i = n - 1; i >= 1; i--) {
-		d[i] = max(d[i + 1], x[i]);
-		e[i] = max(e[i + 1], y[i]);
-		f[i] = max(f[i + 1], z[i]);
-	}
+    for(auto it : even){
+        if(cnt<k){
+            cnt+=(min(it, (k-cnt)));
+            it-=(min(it,(k-cnt)));
+        }
+    }
 
-	// for (auto i : a) cout << i << " ";
-	// cout << endl;
-	
-	for (auto i : b) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	for (auto i : c) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	cout << "-------------------" << endl;
-	for (auto i : e) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	for (auto i : f) cout << i << " ";
-	cout << endl;
-
-	int ans = INT_MIN;
-	for (int i = 2; i < n; i++) {
-		int res = a[i] + max(e[i + 1], b[i - 1]) + max(f[i + 1], c[i - 1]);
-		ans = max(ans, res);
-	}
-	cout << ans << endl;
+    int oo = 0;
+    for(auto it: even){
+        if(it&1) oo++;
+    }
+    if(oo) cout<<"NO"<<endl;
+    else cout<<"YES"<<endl;
 }
 
 int main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    tc(t) solution();
+    // solution();
 }

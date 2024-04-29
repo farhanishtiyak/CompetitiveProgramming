@@ -50,71 +50,29 @@ ll pwr(ll a, ll b) {a %= mod; ll res = 1; while (b > 0) {if (b & 1) res = (res *
 
 void solution()
 {
-	int n;
-	cin >> n;
-	int x[n + 1], y[n + 1], z[n + 1];
-	int a[n + 1], b[n + 1], c[n + 1];
-	int d[n + 1], e[n + 1], f[n + 1];
-	a[0] = 0;
-	b[0] = 0;
-	c[0] = 0;
-	for (int i = 1; i <= n; i++) {
-		int h;
-		cin >> h;
-		x[i] = h;
-		a[i] = max(a[i - 1], h);
-	}
-
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
-		y[i] = x;
-		b[i] = max(b[i - 1], x);
-	}
-
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
-		z[i] = x;
-		c[i] = max(c[i - 1], x);
-	}
-
-	d[n] = x[n];
-	e[n] = y[n];
-	f[n] = z[n];
-	for (int i = n - 1; i >= 1; i--) {
-		d[i] = max(d[i + 1], x[i]);
-		e[i] = max(e[i + 1], y[i]);
-		f[i] = max(f[i + 1], z[i]);
-	}
-
-	// for (auto i : a) cout << i << " ";
-	// cout << endl;
-	
-	for (auto i : b) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	for (auto i : c) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	cout << "-------------------" << endl;
-	for (auto i : e) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	for (auto i : f) cout << i << " ";
-	cout << endl;
-
-	int ans = INT_MIN;
-	for (int i = 2; i < n; i++) {
-		int res = a[i] + max(e[i + 1], b[i - 1]) + max(f[i + 1], c[i - 1]);
-		ans = max(ans, res);
-	}
-	cout << ans << endl;
+   string s;
+   cin>>s;
+   int ans = 0;
+   int cur = 1;
+   for(int i=0; i<s.size(); i++){
+        int x = s[i]-'0';
+        if(x==0){
+            ans+=abs(10-cur);
+            cur = 10;
+        }
+        else {
+            ans+=(abs(cur-x));
+            cur = x;
+        }
+        
+   }
+   ans+=4;
+   cout<<ans<<endl;
 }
 
 int main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    tc(t) solution();
+    // solution();
 }

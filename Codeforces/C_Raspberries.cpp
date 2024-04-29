@@ -48,73 +48,82 @@ ll ceil_div(ll a, ll b) {return a % b == 0 ? a / b : a / b + 1;}
 ll pwr(ll a, ll b) {a %= mod; ll res = 1; while (b > 0) {if (b & 1) res = (res * a) % mod; a = (a * a ) % mod; b >>= 1;} return res;}
 
 
+// Shahajalal Shohag
+
+
+const int N = 20;
+
+int spf[N];   // Smallest Prime Factor
+vector<int> primes;
+void sieve() {
+	for (int i = 2; i < N; i++) {
+		if (spf[i] == 0) spf[i] = i, primes.push_back(i);
+		int sz = primes.size();
+		for (int j = 0; j < sz && i * primes[j] < N && primes[j] <= spf[i]; j++) {
+			spf[i * primes[j]] = primes[j];
+		}
+	}
+}
 void solution()
 {
-	int n;
-	cin >> n;
-	int x[n + 1], y[n + 1], z[n + 1];
-	int a[n + 1], b[n + 1], c[n + 1];
-	int d[n + 1], e[n + 1], f[n + 1];
-	a[0] = 0;
-	b[0] = 0;
-	c[0] = 0;
-	for (int i = 1; i <= n; i++) {
-		int h;
-		cin >> h;
-		x[i] = h;
-		a[i] = max(a[i - 1], h);
+	int n, k;
+	cin >> n >> k;
+	int arr[n];
+	int ans = 0;
+	int e = 0, o = 0;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+		if (arr[i] & 1) o++;
+		else e++;
+	}
+	if (k == 2) {
+		if (e) cout << 0 << endl;
+		else cout << 1 << endl;
+	}
+	else if (k == 4) {
+		if (e = 0) cout << 2 << endl;
+		else if (e == 1) cout << 1 << endl;
+		else cout << 0 << endl;
+	}
+	else if (k == 3) {
+		int dif = INT_MAX;
+		for (int i = 0; i < n; i++) {
+			if (arr[i] % 3 == 0) {
+				cout << 0 << endl;
+				return;
+			}
+			else {
+				int q = arr[i] / 3;
+				q++;
+				q *= 3;
+				dif = min(dif, abs(q - arr[i]));
+			}
+		}
+		cout << dif << endl;
+	}
+	else {
+		int dif = INT_MAX;
+		for (int i = 0; i < n; i++) {
+			if (arr[i] % 5 == 0) {
+				cout << 0 << endl;
+				return;
+			}
+			else {
+				int q = arr[i] / 5;
+				q++;
+				q *= 5;
+				dif = min(dif, abs(q - arr[i]));
+			}
+		}
+		cout << dif << endl;
 	}
 
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
-		y[i] = x;
-		b[i] = max(b[i - 1], x);
-	}
-
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
-		z[i] = x;
-		c[i] = max(c[i - 1], x);
-	}
-
-	d[n] = x[n];
-	e[n] = y[n];
-	f[n] = z[n];
-	for (int i = n - 1; i >= 1; i--) {
-		d[i] = max(d[i + 1], x[i]);
-		e[i] = max(e[i + 1], y[i]);
-		f[i] = max(f[i + 1], z[i]);
-	}
-
-	// for (auto i : a) cout << i << " ";
-	// cout << endl;
-	
-	for (auto i : b) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	for (auto i : c) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	cout << "-------------------" << endl;
-	for (auto i : e) cout << i << " ";
-	cout << endl;
-	cout << "-------------------" << endl;
-	for (auto i : f) cout << i << " ";
-	cout << endl;
-
-	int ans = INT_MIN;
-	for (int i = 2; i < n; i++) {
-		int res = a[i] + max(e[i + 1], b[i - 1]) + max(f[i + 1], c[i - 1]);
-		ans = max(ans, res);
-	}
-	cout << ans << endl;
 }
 
 int main()
 {
 	Sezar;
+	sieve();
 	tc(t) solution();
 	// solution();
 }

@@ -12,6 +12,11 @@
     "vector": "cpp",
     "initializer_list": "cpp",
     "regex": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "random": "cpp",
+    "ostream": "cpp",
+    "*.tcc": "cpp",
+    "complex": "cpp",
+    "cstdlib": "cpp"
   }
 }
