@@ -49,7 +49,7 @@ struct segmenttree {
 		// right subtree is (mid+1,ending)
 		build(mid + 1, ending, 2 * node + 2, v);
 
-		st[node] = (st[node * 2 + 1] | st[node * 2 + 2]);
+		st[node] = __gcd(st[node * 2 + 1] , st[node * 2 + 2]);
 	}
 
 	int query(int start, int ending, int l, int r, int node) {
@@ -69,7 +69,7 @@ struct segmenttree {
 		int q1 = query(start, mid, l, r, 2 * node + 1);
 		int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
 
-		return (q1 | q2);
+		return __gcd(q1 , q2);
 	}
 
 	
@@ -82,9 +82,6 @@ struct segmenttree {
 		return query(0, n - 1, l, r, 0);
 	}
 };
-
-
-
 
 
 void solution()
@@ -101,16 +98,26 @@ void solution()
     tree.init(n);
 	tree.build(arr);
 
+    int allGcd = tree.query(0, n - 1);
+    if(allGcd!=1){
+        cout << -1 << endl;
+        return;
+    }
+
     auto possible = [&](int m) -> bool
     {
         int Gcd = tree.query(0, m - 1);
+        if(Gcd==1ll){
+            return true;
+        }
+
         for (int i = 1; i + m <= n; i++){
             int cur_gcd = tree.query(i, i + m - 1);
-            if(cur_gcd!=Gcd){
-                return false;
+            if(cur_gcd==1ll){
+                return true;
             }
         }
-        return true;
+        return false;
     };
 
     int l = 0, r = n;
@@ -125,6 +132,6 @@ void solution()
 int32_t main()
 {
     Sezar;
-    tc(t) solution();
-    // solution();
+    // tc(t) solution();
+    solution();
 }
