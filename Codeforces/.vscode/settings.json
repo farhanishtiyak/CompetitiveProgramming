@@ -17,6 +17,8 @@
     "ostream": "cpp",
     "*.tcc": "cpp",
     "complex": "cpp",
-    "cstdlib": "cpp"
+    "cstdlib": "cpp",
+    "chrono": "cpp",
+    "limits": "cpp"
   }
 }
