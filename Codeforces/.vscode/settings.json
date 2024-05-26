@@ -19,6 +19,7 @@
     "complex": "cpp",
     "cstdlib": "cpp",
     "chrono": "cpp",
-    "limits": "cpp"
+    "limits": "cpp",
+    "map": "cpp"
   }
 }
