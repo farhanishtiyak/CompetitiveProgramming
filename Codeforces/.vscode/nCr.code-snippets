@@ -1,0 +1,27 @@
+{
+	"NCRCodeSnippet": {
+		"prefix": "nCrCodeSnippet",
+		"body": [
+			"// NCR Code",
+			"const int N = 110;",
+			"",
+			"ll fact[N];",
+			"ll inverse[N];",
+			"",
+			"void computeFactorial() {",
+			"    fact[0] = 1;    inverse[0] = 1;",
+			"    for (ll i = 1; i < N - 1; i++) {",
+			"        fact[i] = mod_mul(fact[i - 1], i);",
+			"        inverse[i] = inv(fact[i]);",
+			"        //inverse[i] = pwr(fact[i], mod - 2);",
+			"    }",
+			"}",
+			"",
+			"ll ncr(ll n, ll r) {",
+			"    if (n < 0 or r<0 or r>n) return 0;",
+			"    return mod_mul(mod_mul(fact[n], inverse[r]), inverse[n - r]);",
+			"}"
+		],
+		"description": "Snippet for NCR calculation with precomputed factorials and inverses"
+	}
+}

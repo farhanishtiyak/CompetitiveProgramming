@@ -1,6 +1,3 @@
-#pragma GCC optimize("Ofast")
-#pragma GCC optimize("unroll-loops")
-#pragma GCC optimize("O3")
 
 #include<bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
@@ -9,7 +6,6 @@
 using namespace std;
 using namespace __gnu_pbds;
 
-#define  Sezar  ios_base::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL)
 #define  tc(t)  int t; cin >> t; while (t--)
 #define  ll     long long
 #define  int     long long
@@ -42,7 +38,6 @@ typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_
 #define    loop(i,a,b)    for (int i = a; i < b; i++)
 #define    rloop(i,a,b)   for (int i = a ; i>=b;i--)
 
-#define    endl           "\n"
 #define    yes            cout << "YES" << endl
 #define    no             cout << "NO" << endl
 #define    minus          cout << "-1" << endl
@@ -88,98 +83,66 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-// summation
-struct segmenttree {
-	int n;
-	vector<int> st;
+vector<int> visited;
+vector<pii> ans;
 
-	void init(int _n) {
-		this->n = _n;
-		st.resize(4 * n, 0);
-	}
+void reset(int n){
+    visited.clear();
+    ans.clear();
+    visited.resize(n + 2, 0);
+}
 
-	void build(int start, int ending, int node, vector<int> &v) {
-		// leaf node base case
-		if (start == ending) {
-			st[node] = v[start];
-			return;
-		}
+int query(int x, int y){
+    cout << "? " << x << " " << y << endl;
+    int ans;
+    cin >> ans;
+    return ans;
+}
 
-		int mid = (start + ending) / 2;
+void print(vector<pii>&arr){
+    cout << "! ";
+    for(auto x : arr){
+        cout << x.ff << " " << x.ss << " ";
+    }
+    cout << endl;
+}
 
-		// left subtree is (start,mid)
-		build(start, mid, 2 * node + 1, v);
+void run(int i, int j){
+    int g = query(i, j);
+    if(g==i){
+        ans.pb(mkp(i, j));
+        visited[i] = visited[j] = 1;
+        return;
+    }
 
-		// right subtree is (mid+1,ending)
-		build(mid + 1, ending, 2 * node + 2, v);
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-	}
-
-	int query(int start, int ending, int l, int r, int node) {
-		// non overlapping case
-		if (start > r || ending < l) {
-			return 0;
-		}
-
-		// complete overlap
-		if (start >= l && ending <= r) {
-			return st[node];
-		}
-
-		// partial case
-		int mid = (start + ending) / 2;
-
-		int q1 = query(start, mid, l, r, 2 * node + 1);
-		int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
-
-		return q1 + q2;
-	}
-
-	void update(int start, int ending, int node, int index, int value) {
-		// base case
-		if (start == ending) {
-			st[node] = value;
-			return;
-		}
-
-		int mid = (start + ending) / 2;
-		if (index <= mid) {
-			// left subtree
-			update(start, mid, 2 * node + 1, index, value);
-		}
-		else {
-			// right
-			update(mid + 1, ending, 2 * node + 2, index, value);
-		}
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-
-		return;
-	}
-
-	void build(vector<int> &v) {
-		build(0, n - 1, 0, v);
-	}
-
-	int query(int l, int r) {
-		return query(0, n - 1, l, r, 0);
-	}
-
-	void update(int x, int y) {
-		update(0, n - 1, 0, x, y);
-	}
-};
-
+    if(visited[i]==1 and visited[g]==1){
+        run(g, j);
+    }else{
+        run(i, g);
+        run(g, j);
+    }
+}
 
 void solution()
 {
-	
+    
+    int n;
+    cin >> n;
+    reset(n);
+
+    loop(i,1,n){
+        loop(j,i+1,n+1){
+            if(!visited[j]){
+                run(i, j);
+            }
+        }
+    }
+
+    print(ans);
 }
 
 int32_t main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    tc(t) solution();
+    // solution();
 }

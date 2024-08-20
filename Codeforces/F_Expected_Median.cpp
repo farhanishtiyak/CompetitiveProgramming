@@ -48,7 +48,7 @@ typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_
 #define    minus          cout << "-1" << endl
 #define    inf            9223372036854775807
 
-const      int mod = 998244353;
+const      int mod = 1000000007;
 const      int MOD = 1000000007;
 const      int INF = LLONG_MAX;
 
@@ -88,98 +88,54 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-// summation
-struct segmenttree {
-	int n;
-	vector<int> st;
 
-	void init(int _n) {
-		this->n = _n;
-		st.resize(4 * n, 0);
-	}
+// NCR Code
+const int N = 2e5+10;
 
-	void build(int start, int ending, int node, vector<int> &v) {
-		// leaf node base case
-		if (start == ending) {
-			st[node] = v[start];
-			return;
-		}
+ll fact[N];
+ll inverse[N];
 
-		int mid = (start + ending) / 2;
+void computeFactorial() {
+    fact[0] = 1;    inverse[0] = 1;
+    for (ll i = 1; i < N - 1; i++) {
+        fact[i] = mod_mul(fact[i - 1], i);
+        inverse[i] = inv(fact[i]);
+        //inverse[i] = pwr(fact[i], mod - 2);
+    }
+}
 
-		// left subtree is (start,mid)
-		build(start, mid, 2 * node + 1, v);
-
-		// right subtree is (mid+1,ending)
-		build(mid + 1, ending, 2 * node + 2, v);
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-	}
-
-	int query(int start, int ending, int l, int r, int node) {
-		// non overlapping case
-		if (start > r || ending < l) {
-			return 0;
-		}
-
-		// complete overlap
-		if (start >= l && ending <= r) {
-			return st[node];
-		}
-
-		// partial case
-		int mid = (start + ending) / 2;
-
-		int q1 = query(start, mid, l, r, 2 * node + 1);
-		int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
-
-		return q1 + q2;
-	}
-
-	void update(int start, int ending, int node, int index, int value) {
-		// base case
-		if (start == ending) {
-			st[node] = value;
-			return;
-		}
-
-		int mid = (start + ending) / 2;
-		if (index <= mid) {
-			// left subtree
-			update(start, mid, 2 * node + 1, index, value);
-		}
-		else {
-			// right
-			update(mid + 1, ending, 2 * node + 2, index, value);
-		}
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-
-		return;
-	}
-
-	void build(vector<int> &v) {
-		build(0, n - 1, 0, v);
-	}
-
-	int query(int l, int r) {
-		return query(0, n - 1, l, r, 0);
-	}
-
-	void update(int x, int y) {
-		update(0, n - 1, 0, x, y);
-	}
-};
-
+ll ncr(ll n, ll r) {
+    if (n < 0 or r<0 or r>n) return 0;
+    return mod_mul(mod_mul(fact[n], inverse[r]), inverse[n - r]);
+}
 
 void solution()
 {
-	
+    int n, k;
+    cin >> n >> k;
+    vi arr(n);
+    input(arr);
+    int ones = 0;
+    int z = 0;
+    forf(i,n){
+        if(arr[i]==1){
+            ones++;
+        }else{
+            z++;
+        }
+    }
+    int ans = 0;
+    for (int i = (k / 2) + 1; i <= k; i++){
+        ans += mod_mul(ncr(ones, i),ncr(z,(k-i)));
+        ans %= mod;
+    }
+    output(ans);
 }
 
 int32_t main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    computeFactorial();
+    tc(t) solution();
+    // solution();
 }

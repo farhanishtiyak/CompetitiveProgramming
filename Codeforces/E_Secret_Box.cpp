@@ -1,7 +1,3 @@
-#pragma GCC optimize("Ofast")
-#pragma GCC optimize("unroll-loops")
-#pragma GCC optimize("O3")
-
 #include<bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -36,8 +32,8 @@ typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_
 #define    ff             first
 #define    ss             second
 
-#define    forf(i,n)      for (int i = 0; i < n; i++)
-#define    forb(i,n)      for (int i = n-1; i >= 0; i--)
+#define    for0(i,n)      for (int i = 0; i < n; i++)
+#define    forR(i,n)      for (int i = n-1; i >= 0; i--)
 #define    for1(i, n)     for (int i = 1; i <= n; i++)
 #define    loop(i,a,b)    for (int i = a; i < b; i++)
 #define    rloop(i,a,b)   for (int i = a ; i>=b;i--)
@@ -50,7 +46,7 @@ typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_
 
 const      int mod = 998244353;
 const      int MOD = 1000000007;
-const      int INF = LLONG_MAX;
+const      int INF = INT_MAX;
 
 const int dx[4] = { -1, 1, 0, 0};
 const int dy[4] = {0, 0, -1, 1};
@@ -78,8 +74,6 @@ void input(vi &a)  {for (auto &x : a) {cin >> x;}}
 void output(vi &a) {for (auto &x : a) {cout << x << " ";} cout << endl;}
 void output(auto x) {cout << x << endl;}
 void getUnique(vi &a) {sort(a.begin(), a.end()); a.erase(unique(a.begin(), a.end()), a.end());}
-
-int stringToint(string &s) { int number = 0; for (auto ch : s) { number = (number * 10) + (ch - '0');} return number; }
 int  maxx(vi &a) { return (*max_element(a.begin(), a.end())); }
 int  minn(vi &a) { return (*min_element(a.begin(), a.end())); }
 
@@ -88,98 +82,38 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-// summation
-struct segmenttree {
-	int n;
-	vector<int> st;
-
-	void init(int _n) {
-		this->n = _n;
-		st.resize(4 * n, 0);
-	}
-
-	void build(int start, int ending, int node, vector<int> &v) {
-		// leaf node base case
-		if (start == ending) {
-			st[node] = v[start];
-			return;
-		}
-
-		int mid = (start + ending) / 2;
-
-		// left subtree is (start,mid)
-		build(start, mid, 2 * node + 1, v);
-
-		// right subtree is (mid+1,ending)
-		build(mid + 1, ending, 2 * node + 2, v);
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-	}
-
-	int query(int start, int ending, int l, int r, int node) {
-		// non overlapping case
-		if (start > r || ending < l) {
-			return 0;
-		}
-
-		// complete overlap
-		if (start >= l && ending <= r) {
-			return st[node];
-		}
-
-		// partial case
-		int mid = (start + ending) / 2;
-
-		int q1 = query(start, mid, l, r, 2 * node + 1);
-		int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
-
-		return q1 + q2;
-	}
-
-	void update(int start, int ending, int node, int index, int value) {
-		// base case
-		if (start == ending) {
-			st[node] = value;
-			return;
-		}
-
-		int mid = (start + ending) / 2;
-		if (index <= mid) {
-			// left subtree
-			update(start, mid, 2 * node + 1, index, value);
-		}
-		else {
-			// right
-			update(mid + 1, ending, 2 * node + 2, index, value);
-		}
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-
-		return;
-	}
-
-	void build(vector<int> &v) {
-		build(0, n - 1, 0, v);
-	}
-
-	int query(int l, int r) {
-		return query(0, n - 1, l, r, 0);
-	}
-
-	void update(int x, int y) {
-		update(0, n - 1, 0, x, y);
-	}
-};
-
-
 void solution()
 {
-	
+    int l, w, h, v;
+    cin >> l >> w >> h >> v;
+    int ans = INT_MIN;
+    loop(i,1,l+1){
+        // int curX = v / i;
+        // int rest = h * w;
+        // if((v%i)!=0 or rest<curX){
+        //     continue;
+        // }
+
+        for1(ii,w){
+            int rem = v % (i * ii);
+            int qu = v / (i * ii);
+
+            if(qu<=h and rem==0){
+                int cur =1ll*(1 + l - i) * (1 + w - ii) * (1 + h - qu);
+                ans = max(ans, cur);
+                // break;
+            }
+        }
+    }
+    if(ans<0){
+        ans = 0;
+    }
+    output(ans);
 }
 
 int32_t main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    tc(t) solution();
+    // solution();
 }

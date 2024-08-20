@@ -20,6 +20,8 @@
     "cstdlib": "cpp",
     "chrono": "cpp",
     "limits": "cpp",
-    "map": "cpp"
+    "map": "cpp",
+    "bitset": "cpp",
+    "utility": "cpp"
   }
 }

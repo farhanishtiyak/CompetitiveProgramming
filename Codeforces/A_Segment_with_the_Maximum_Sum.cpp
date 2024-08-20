@@ -33,8 +33,7 @@ typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_
 #define    pb             emplace_back
 #define    ppb            pop_back
 #define    mkp            make_pair
-#define    ff             first
-#define    ss             second
+
 
 #define    forf(i,n)      for (int i = 0; i < n; i++)
 #define    forb(i,n)      for (int i = n-1; i >= 0; i--)
@@ -88,98 +87,119 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-// summation
-struct segmenttree {
-	int n;
-	vector<int> st;
-
-	void init(int _n) {
-		this->n = _n;
-		st.resize(4 * n, 0);
-	}
-
-	void build(int start, int ending, int node, vector<int> &v) {
-		// leaf node base case
-		if (start == ending) {
-			st[node] = v[start];
-			return;
-		}
-
-		int mid = (start + ending) / 2;
-
-		// left subtree is (start,mid)
-		build(start, mid, 2 * node + 1, v);
-
-		// right subtree is (mid+1,ending)
-		build(mid + 1, ending, 2 * node + 2, v);
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-	}
-
-	int query(int start, int ending, int l, int r, int node) {
-		// non overlapping case
-		if (start > r || ending < l) {
-			return 0;
-		}
-
-		// complete overlap
-		if (start >= l && ending <= r) {
-			return st[node];
-		}
-
-		// partial case
-		int mid = (start + ending) / 2;
-
-		int q1 = query(start, mid, l, r, 2 * node + 1);
-		int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
-
-		return q1 + q2;
-	}
-
-	void update(int start, int ending, int node, int index, int value) {
-		// base case
-		if (start == ending) {
-			st[node] = value;
-			return;
-		}
-
-		int mid = (start + ending) / 2;
-		if (index <= mid) {
-			// left subtree
-			update(start, mid, 2 * node + 1, index, value);
-		}
-		else {
-			// right
-			update(mid + 1, ending, 2 * node + 2, index, value);
-		}
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-
-		return;
-	}
-
-	void build(vector<int> &v) {
-		build(0, n - 1, 0, v);
-	}
-
-	int query(int l, int r) {
-		return query(0, n - 1, l, r, 0);
-	}
-
-	void update(int x, int y) {
-		update(0, n - 1, 0, x, y);
-	}
+struct nodeInfo {
+	int ps, ss, ts, ms;
+	// ps : Prefix sum
+	// ss : suffix sum
+	// ts : total sum
+	// ms : maximum subarray sum
 };
+
+nodeInfo merge(nodeInfo left, nodeInfo right){
+    nodeInfo ans;
+    ans.ps = max(left.ps, left.ts + right.ps);
+    ans.ss = max(right.ss, right.ts + left.ss);
+    ans.ts = left.ts + right.ts;
+    vi temp = {left.ms, right.ms, left.ss + right.ps};
+    ans.ms = maxx(temp);
+    return ans;
+}
+
+
+
+struct segmenttree {
+    int n;
+    vector<nodeInfo> st;
+
+    void init(int _n) {
+        this->n = _n;
+        st.resize(4 * n);
+    }
+
+    void build(int start, int ending, int node, vector<int> &v) {
+        // leaf node base case
+        
+        if (start == ending) {
+            nodeInfo currentNode;
+            currentNode.ps = currentNode.ss = currentNode.ts = currentNode.ms = v[start];
+            st[node] = currentNode;
+            return;
+        }
+
+        int mid = (start + ending) / 2;
+
+        // left subtree is (start,mid)
+        build(start, mid, 2 * node + 1, v);
+
+        // right subtree is (mid+1,ending)
+        build(mid + 1, ending, 2 * node + 2, v);
+
+        st[node] = merge(st[node * 2 + 1] , st[node * 2 + 2]);
+    }
+
+
+    void update(int start, int ending, int node, int index, int value) {
+        // base case
+        if (start == ending) {
+           nodeInfo currentNode;
+            currentNode.ps = currentNode.ss = currentNode.ts = currentNode.ms = value;
+            st[node] = currentNode;
+            return;
+        }
+
+        int mid = (start + ending) / 2;
+        if (index <= mid) {
+            // left subtree
+            update(start, mid, 2 * node + 1, index, value);
+        }
+        else {
+            // right
+            update(mid + 1, ending, 2 * node + 2, index, value);
+        }
+
+        st[node] = merge(st[node * 2 + 1] , st[node * 2 + 2]);
+
+        return;
+    }
+
+    void build(vector<int> &v) {
+        build(0, n - 1, 0, v);
+    }
+
+    void update(int x, int y) {
+        update(0, n - 1, 0, x, y);
+    }
+};
+
+
 
 
 void solution()
 {
-	
+    int n, q;
+    cin >> n >> q;
+    vi arr(n);
+    input(arr);
+    segmenttree tree;
+    tree.init(n);
+    tree.build(arr);
+    nodeInfo head = tree.st[0];
+    vi ans = {head.ps, head.ms, head.ss, head.ts};
+    output(max(0ll,maxx(ans)));
+
+    while(q--){
+        int i, v;
+        cin>>i>>v;
+        tree.update(i, v);
+        head = tree.st[0];
+        ans = {head.ps, head.ms, head.ss, head.ts};
+        output(max(0ll,maxx(ans)));
+    }
 }
 
 int32_t main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    // tc(t) solution();
+    solution();
 }

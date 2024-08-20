@@ -88,98 +88,121 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-// summation
+// minimum
 struct segmenttree {
-	int n;
-	vector<int> st;
+    int n;
+    vector<int> st;
 
-	void init(int _n) {
-		this->n = _n;
-		st.resize(4 * n, 0);
-	}
+    void init(int _n) {
+        this->n = _n;
+        st.resize(4 * n, inf);
+    }
 
-	void build(int start, int ending, int node, vector<int> &v) {
-		// leaf node base case
-		if (start == ending) {
-			st[node] = v[start];
-			return;
-		}
+    void build(int start, int ending, int node, vector<int> &v) {
+        // leaf node base case
+        if (start == ending) {
+            st[node] = v[start];
+            return;
+        }
 
-		int mid = (start + ending) / 2;
+        int mid = (start + ending) / 2;
 
-		// left subtree is (start,mid)
-		build(start, mid, 2 * node + 1, v);
+        // left subtree is (start,mid)
+        build(start, mid, 2 * node + 1, v);
 
-		// right subtree is (mid+1,ending)
-		build(mid + 1, ending, 2 * node + 2, v);
+        // right subtree is (mid+1,ending)
+        build(mid + 1, ending, 2 * node + 2, v);
 
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-	}
+        st[node] = min(st[node * 2 + 1] , st[node * 2 + 2]);
+    }
 
-	int query(int start, int ending, int l, int r, int node) {
-		// non overlapping case
-		if (start > r || ending < l) {
-			return 0;
-		}
+    int query(int start, int ending, int l, int r, int node) {
+        // non overlapping case
+        if (start > r || ending < l) {
+            return inf;
+        }
 
-		// complete overlap
-		if (start >= l && ending <= r) {
-			return st[node];
-		}
+        // complete overlap
+        if (start >= l && ending <= r) {
+            return st[node];
+        }
 
-		// partial case
-		int mid = (start + ending) / 2;
+        // partial case
+        int mid = (start + ending) / 2;
 
-		int q1 = query(start, mid, l, r, 2 * node + 1);
-		int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
+        int q1 = query(start, mid, l, r, 2 * node + 1);
+        int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
 
-		return q1 + q2;
-	}
+        return min(q1 , q2);
+    }
 
-	void update(int start, int ending, int node, int index, int value) {
-		// base case
-		if (start == ending) {
-			st[node] = value;
-			return;
-		}
+    void update(int start, int ending, int node, int index, int value) {
+        // base case
+        if (start == ending) {
+            st[node] = value;
+            return;
+        }
 
-		int mid = (start + ending) / 2;
-		if (index <= mid) {
-			// left subtree
-			update(start, mid, 2 * node + 1, index, value);
-		}
-		else {
-			// right
-			update(mid + 1, ending, 2 * node + 2, index, value);
-		}
+        int mid = (start + ending) / 2;
+        if (index <= mid) {
+            // left subtree
+            update(start, mid, 2 * node + 1, index, value);
+        }
+        else {
+            // right
+            update(mid + 1, ending, 2 * node + 2, index, value);
+        }
 
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
+        st[node] = min(st[node * 2 + 1] , st[node * 2 + 2]);
 
-		return;
-	}
+        return;
+    }
 
-	void build(vector<int> &v) {
-		build(0, n - 1, 0, v);
-	}
+    void build(vector<int> &v) {
+        build(0, n - 1, 0, v);
+    }
 
-	int query(int l, int r) {
-		return query(0, n - 1, l, r, 0);
-	}
+    int query(int l, int r) {
+        return query(0, n - 1, l, r, 0);
+    }
 
-	void update(int x, int y) {
-		update(0, n - 1, 0, x, y);
-	}
+    void update(int x, int y) {
+        update(0, n - 1, 0, x, y);
+    }
 };
+
 
 
 void solution()
 {
-	
+    int n, m;
+    cin >> n >> m;
+    vi arr(n);
+    input(arr);
+
+    segmenttree tree;
+    tree.init(n);
+    tree.build(arr);
+
+    while(m--){
+        int x;
+        cin >> x;
+        if(x==1){
+            int i, v;
+            cin >> i >> v;
+            tree.update(i, v);
+        }else{
+            int l, r;
+            cin >> l >> r;
+            r--;
+            output(tree.query(l, r));
+        }
+    }
 }
 
 int32_t main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    // tc(t) solution();
+    solution();
 }

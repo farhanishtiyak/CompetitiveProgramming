@@ -88,98 +88,67 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-// summation
-struct segmenttree {
-	int n;
-	vector<int> st;
+vector<int> z_best(string s) {
+    int n = s.size();
+    vector<int> z(n, 0);
+    int L = 0, R = 0;
 
-	void init(int _n) {
-		this->n = _n;
-		st.resize(4 * n, 0);
-	}
+    for (int i = 1; i < n; i++) {
+        if (i <= R) {
+            z[i] = min(z[i - L], R - i + 1);
+        }
+        while (i + z[i] < n && s[z[i]] == s[z[i] + i]) {
+            z[i]++;
+        }
+        if (i + z[i] - 1 > R) {
+            L = i; R = i + z[i] - 1;
+        }
+    }
 
-	void build(int start, int ending, int node, vector<int> &v) {
-		// leaf node base case
-		if (start == ending) {
-			st[node] = v[start];
-			return;
-		}
+    return z;
+}
 
-		int mid = (start + ending) / 2;
-
-		// left subtree is (start,mid)
-		build(start, mid, 2 * node + 1, v);
-
-		// right subtree is (mid+1,ending)
-		build(mid + 1, ending, 2 * node + 2, v);
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-	}
-
-	int query(int start, int ending, int l, int r, int node) {
-		// non overlapping case
-		if (start > r || ending < l) {
-			return 0;
-		}
-
-		// complete overlap
-		if (start >= l && ending <= r) {
-			return st[node];
-		}
-
-		// partial case
-		int mid = (start + ending) / 2;
-
-		int q1 = query(start, mid, l, r, 2 * node + 1);
-		int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
-
-		return q1 + q2;
-	}
-
-	void update(int start, int ending, int node, int index, int value) {
-		// base case
-		if (start == ending) {
-			st[node] = value;
-			return;
-		}
-
-		int mid = (start + ending) / 2;
-		if (index <= mid) {
-			// left subtree
-			update(start, mid, 2 * node + 1, index, value);
-		}
-		else {
-			// right
-			update(mid + 1, ending, 2 * node + 2, index, value);
-		}
-
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-
-		return;
-	}
-
-	void build(vector<int> &v) {
-		build(0, n - 1, 0, v);
-	}
-
-	int query(int l, int r) {
-		return query(0, n - 1, l, r, 0);
-	}
-
-	void update(int x, int y) {
-		update(0, n - 1, 0, x, y);
-	}
-};
 
 
 void solution()
 {
-	
+    string s;
+    cin >> s;
+
+    vector<int> z = z_best(s);
+
+    vpll ans;
+    mii cnt;
+    vi px;
+    for(auto x : z){
+        cnt[x]++;
+        if(x){
+            px.pb(x);
+        }
+    }
+
+    sort(all(px));
+
+
+    for (int i = 0; i<s.size(); i++){
+        if(i+z[i]==s.size()){
+            int x =upper_bound(all(px), z[i])-px.begin();
+            x = px.size() - x;
+            ans.pb(mkp(z[i], cnt[z[i]]+x+1));
+        }
+    }
+
+    output(ans.size() + 1);
+    sort(all(ans));
+    for(auto x : ans){
+        cout << x.ff << " " << x.ss << endl;
+    }
+    cout << s.size() << " " << 1 << endl;
 }
 
 int32_t main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    // tc(t) solution();
+    solution();
 }

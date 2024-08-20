@@ -88,98 +88,149 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-// summation
+// minimum
 struct segmenttree {
-	int n;
-	vector<int> st;
+    int n;
+    vector<int> st, cnt;
 
-	void init(int _n) {
-		this->n = _n;
-		st.resize(4 * n, 0);
-	}
+    void init(int _n) {
+        this->n = _n;
+        st.resize(4 * n, inf);
+        cnt.resize(4 * n, 0);
+    }
 
-	void build(int start, int ending, int node, vector<int> &v) {
-		// leaf node base case
-		if (start == ending) {
-			st[node] = v[start];
-			return;
-		}
+    void build(int start, int ending, int node, vector<int> &v) {
+        // leaf node base case
+        if (start == ending) {
+            st[node] = v[start];
+            cnt[node] = 1;
+            return;
+        }
 
-		int mid = (start + ending) / 2;
+        int mid = (start + ending) / 2;
 
-		// left subtree is (start,mid)
-		build(start, mid, 2 * node + 1, v);
+        // left subtree is (start,mid)
+        build(start, mid, 2 * node + 1, v);
 
-		// right subtree is (mid+1,ending)
-		build(mid + 1, ending, 2 * node + 2, v);
+        // right subtree is (mid+1,ending)
+        build(mid + 1, ending, 2 * node + 2, v);
 
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
-	}
+        st[node] = min(st[node * 2 + 1] , st[node * 2 + 2]);
+        if(st[node*2+1]==st[node*2+2]){
+            cnt[node] = cnt[node * 2 + 1] + cnt[node * 2 + 2];
+        }else if(st[node]==st[node*2+1]){
+            cnt[node] = cnt[node * 2 + 1];
+        }else{
+            cnt[node] = cnt[node * 2 + 2];
+        }
 
-	int query(int start, int ending, int l, int r, int node) {
-		// non overlapping case
-		if (start > r || ending < l) {
-			return 0;
-		}
+    }
 
-		// complete overlap
-		if (start >= l && ending <= r) {
-			return st[node];
-		}
+    pii query(int start, int ending, int l, int r, int node) {
+        // non overlapping case
+        if (start > r || ending < l) {
+            return mkp(inf,0);
+        }
 
-		// partial case
-		int mid = (start + ending) / 2;
+        // complete overlap
+        if (start >= l && ending <= r) {
+            return mkp(st[node],cnt[node]);
+        }
 
-		int q1 = query(start, mid, l, r, 2 * node + 1);
-		int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
+        // partial case
+        int mid = (start + ending) / 2;
 
-		return q1 + q2;
-	}
+        pii q1 = query(start, mid, l, r, 2 * node + 1);
+        pii q2 = query(mid + 1, ending, l, r, 2 * node + 2);
 
-	void update(int start, int ending, int node, int index, int value) {
-		// base case
-		if (start == ending) {
-			st[node] = value;
-			return;
-		}
+        pii ans;
+        ans.ff = min(q1.ff, q2.ff);
+        if(q1.ff==q2.ff){
+            ans.ss = q1.ss + q2.ss;
+        }else if(ans.ff==q1.ff){
+            ans.ss = q1.ss;
+        }else{
+            ans.ss = q2.ss;
+        }
+        return ans;
+    }
 
-		int mid = (start + ending) / 2;
-		if (index <= mid) {
-			// left subtree
-			update(start, mid, 2 * node + 1, index, value);
-		}
-		else {
-			// right
-			update(mid + 1, ending, 2 * node + 2, index, value);
-		}
+    void update(int start, int ending, int node, int index, int value) {
+        // base case
+        if (start == ending) {
+            st[node] = value;
+            cnt[node] = 1;
+            return;
+        }
 
-		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
+        int mid = (start + ending) / 2;
+        if (index <= mid) {
+            // left subtree
+            update(start, mid, 2 * node + 1, index, value);
+        }
+        else {
+            // right
+            update(mid + 1, ending, 2 * node + 2, index, value);
+        }
 
-		return;
-	}
+        st[node] = min(st[node * 2 + 1] , st[node * 2 + 2]);
+        if(st[node*2+1]==st[node*2+2]){
+            cnt[node] = cnt[node * 2 + 1] + cnt[node * 2 + 2];
+        }else if(st[node]==st[node*2+1]){
+            cnt[node] = cnt[node * 2 + 1];
+        }else{
+            cnt[node] = cnt[node * 2 + 2];
+        }
 
-	void build(vector<int> &v) {
-		build(0, n - 1, 0, v);
-	}
+        return;
+    }
 
-	int query(int l, int r) {
-		return query(0, n - 1, l, r, 0);
-	}
+    void build(vector<int> &v) {
+        build(0, n - 1, 0, v);
+    }
 
-	void update(int x, int y) {
-		update(0, n - 1, 0, x, y);
-	}
+    pii query(int l, int r) {
+        return query(0, n - 1, l, r, 0);
+    }
+
+    void update(int x, int y) {
+        update(0, n - 1, 0, x, y);
+    }
 };
+
 
 
 void solution()
 {
-	
+    int n, m;
+    cin >> n >> m;
+    vi arr(n);
+    input(arr);
+
+    segmenttree tree;
+    tree.init(n);
+    tree.build(arr);
+
+    while(m--){
+        int x;
+        cin >> x;
+        if(x==1){
+            int i, v;
+            cin >> i >> v;
+            tree.update(i, v);
+        }else{
+            int l, r;
+            cin >> l >> r;
+            r--;
+            pii ans = tree.query(l, r);
+            cout << ans.ff << " " << ans.ss << endl;
+        }
+    }
 }
 
 int32_t main()
 {
-	Sezar;
-	tc(t) solution();
-	// solution();
+    Sezar;
+    // tc(t) solution();
+    solution();
 }
