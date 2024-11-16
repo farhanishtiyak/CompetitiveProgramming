@@ -19,7 +19,7 @@ typedef  pair<int, int> pii;
 typedef  pair<int, int> pll;
 typedef  vector<int> vi;
 typedef  vector<int> vll;
-typedef  vector<pll> vpll;
+typedef  vector<pll> brrllll;
 typedef  vector<string> vs;
 typedef  unordered_map<int, int> umii;
 typedef  map<int, int> mii;
@@ -88,20 +88,25 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
+mt19937 rng(chrono::high_resolution_clock::now().time_since_epoch().count());
+
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
-        }
+    int n;
+    cin >> n;
+    for(int i=0; i<n; i++){
+        int l, r;
+        cin >> l >> r;
     }
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    vi run(n);
+    iota(all(run), 0);
+    shuffle(all(run), rng);
+    for (int i = 0; i < n; i++){
+        if(i%3==0 and i!=0){
+            cout << endl;
+        }
+        cout << run[i] << " ";
     }
     cout << endl;
 }

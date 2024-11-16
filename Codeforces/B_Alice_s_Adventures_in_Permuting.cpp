@@ -12,7 +12,7 @@ using namespace __gnu_pbds;
 #define  Sezar  ios_base::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL)
 #define  tc(t)  int t; cin >> t; while (t--)
 #define  ll     long long
-#define  int     long long
+#define  int     unsigned long long
 #define  ld     long double
 
 typedef  pair<int, int> pii;
@@ -25,7 +25,7 @@ typedef  unordered_map<int, int> umii;
 typedef  map<int, int> mii;
 typedef  unordered_map<int, int> umll;
 typedef  map<int, int> mll;
-typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_update> pbds;
+typedef  tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 
 #define    all(v)         (v).begin(),(v).end()
 #define    all1(v)        (v).begin()+1,(v).end()
@@ -52,10 +52,6 @@ const      int mod = 998244353;
 const      int MOD = 1000000007;
 const      int INF = LLONG_MAX;
 
-const int dx[4] = { -1, 1, 0, 0};
-const int dy[4] = {0, 0, -1, 1};
-const int XX[] = { -1, -1, -1, 0, 0, 1, 1, 1 };
-const int YY[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
 int inv(int i) {if (i == 1) return 1; return (mod - ((mod / i) * inv(mod % i)) % mod) % mod;}
 
@@ -88,27 +84,81 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-void solution()
-{
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+
+
+int n, b, c;
+
+int fast_mul(int x, int y) {
+    int res = 0ull;
+    while (y) {
+        if (y & 1ull) {
+            res += x;
+        }
+        x += x;
+        y >>= 1ull;
+
+        if (res >= n) {
+            return -1ull;
         }
     }
+    return res;
+}
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+
+bool possible(int i) {
+    int num = fast_mul(b, i - 1ull);
+    if (num == -1ull) {
+        return false;
     }
-    cout << endl;
+    num += c;
+    return num <= (n - 1ull);
+}
+void solution()
+{
+    cin >> n >> b >> c;
+    if (b == 0ull and c == 0ull) {
+        if (n == 1) {
+            cout << 0 << endl;
+        } else if(n==2){
+            cout << 1 << endl;
+        }
+        else {
+            cout << -1 << endl;
+        }
+        return;
+    }
+
+    if (c >= n) {
+        cout << n << endl;
+        return;
+    }
+
+    if (b == 0) {
+        if (c >= n) {
+            cout << n << endl;
+        } else if(c==n-1){
+            cout << n - 1 << endl;
+        }else if(c==n-2){
+            cout << n - 1 << endl;
+        }else{
+            cout << -1 << endl;
+        }
+        return;
+    }
+
+    int low = 0, high = n + 10;
+    while ((high - low) > 1) {
+        int mid = (high - low) >> 1;
+        mid += low;
+        possible(mid) ? low = mid : high = mid;
+    }
+    int ans = n - low;
+    cout << ans << endl;
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

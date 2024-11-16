@@ -88,27 +88,54 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
+int n;
+
+
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
-        }
-    }
+    cin >> n;
+    int m, q;
+    cin >> m >> q;
+    vi teachers(m);
+    input(teachers);
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    sort(all(teachers));
+
+    auto compute = [&](int p) -> int
+    {
+        int x = teachers[0];
+        int y = teachers[m - 1];
+        if(p<x){
+            return x - 1;
+        }else if(p>y){
+            return n - y;
+        }else{
+            auto yy = upper_bound(all(teachers), p);
+            y = *yy;
+            x = *(prev(yy));
+
+            int tot = x + y;
+            tot /= 2;
+            int diff = abs(tot - p);
+            x += diff;
+            y -= diff;
+            int ans = min(tot - x, y - tot);
+            ans += diff;
+            return ans;
+        }
+    };
+
+    while(q--){
+        int d;
+        cin >> d;
+
+        cout << compute(d) << endl;
     }
-    cout << endl;
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

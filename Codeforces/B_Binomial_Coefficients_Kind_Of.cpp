@@ -48,7 +48,7 @@ typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_
 #define    minus          cout << "-1" << endl
 #define    inf            9223372036854775807
 
-const      int mod = 998244353;
+const      int mod = 1000000007;
 const      int MOD = 1000000007;
 const      int INF = LLONG_MAX;
 
@@ -90,20 +90,17 @@ bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x
 
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
-        }
-    }
+    int n;
+    cin >> n;
+    vi arr(n);
+    input(arr);
+    vi trr(n);
+    input(trr);
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    for(auto x : trr){
+        int ans = pwr(2, x);
+        output(ans);
     }
-    cout << endl;
 }
 
 int32_t main()

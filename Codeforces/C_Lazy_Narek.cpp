@@ -90,25 +90,92 @@ bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x
 
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+    int n, m;
+    cin >> n >> m;
+    vector<string> arr;
+    string ans = "";
+    forf(i,n){
+        string s;
+        cin >> s;
+        arr.pb(s);
+        ans += s;
+    }
+
+    int score = 0;
+
+    string check = "narek";
+    int j = 0, k = 0, i = 0;
+
+    while(i<ans.size() and j<ans.size()){
+        
+        while(i<ans.size() and k<5){
+            if(ans[i]==check[k]){
+                i++;
+                k++;
+            }else{
+                i++;
+            }
+        }
+
+        if(k==5){
+            int c = 0;
+            k = 4;
+            int j = i - 1;
+            while(j>=0 and k>=0){
+                if(ans[j]==check[k]){
+                    j--;
+                    k--;
+                }else{
+                    if(ans[j]=='n' or ans[j]=='a' or ans[j]=='r' or ans[j]=='e' or ans[j]=='k'){
+                        c++;
+                        j--;
+                    }else{
+                        j--;
+                    }
+                }
+            }
+
+            if(k<0){
+                while(j>=0){
+
+                    if(ans[j]=='n' or ans[j]=='a' or ans[j]=='r' or ans[j]=='e' or ans[j]=='k'){
+                        c++;
+                    }
+                    if(j%m==0){
+                        break;
+                    }else{
+                        j--;
+                    }
+                }
+
+                // while(i<ans.size()){
+
+                //     if(ans[i]=='n' or ans[i]=='a' or ans[i]=='r' or ans[i]=='e' or ans[i]=='k'){
+                //         c++;
+                //     }
+                //     if(i%m==0){
+                //         break;
+                //     }else{
+                //         i++;
+                //     }
+                // }
+
+                int diff = 5 - c;
+                if(diff){
+                    score += diff;
+                }
+            }
+
+            k = 0;
         }
     }
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
-    }
-    cout << endl;
+    output(score);
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

@@ -88,27 +88,38 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
+int prefix_sum(int x){
+    int ans = (x * (x + 1)) / 2;
+    return ans;
+}
+
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
-        }
-    }
+    int n,k;
+    cin >> n >> k;
+    int last = k + n - 1;
+    int xx = prefix_sum(last);
+    int yy = prefix_sum(k);
+    int total = xx - yy;
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    int ans = total;
+
+    int l = k, r = last;
+    while(r-l>1){
+        int m = (r + l) / 2;
+
+        int mm = prefix_sum(m);
+        int suf = xx - mm;
+        int pre = mm - yy;
+        int cur = abs(suf - pre);
+        (cur < ans) ? l = m : r = m;
     }
-    cout << endl;
+    output(l-k+1);
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

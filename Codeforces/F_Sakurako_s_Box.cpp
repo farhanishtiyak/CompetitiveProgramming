@@ -48,7 +48,7 @@ typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_
 #define    minus          cout << "-1" << endl
 #define    inf            9223372036854775807
 
-const      int mod = 998244353;
+const      int mod = 1e9+7;
 const      int MOD = 1000000007;
 const      int INF = LLONG_MAX;
 
@@ -90,25 +90,40 @@ bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x
 
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+    int n;
+    cin >> n;
+    vi arr(n);
+
+    vi sum(n,0ll);
+    // partial_sum(all(sum), sum.begin());
+    for(int i=0; i<n; i++){
+        int x;
+        cin >> x;
+        x %= mod;
+        arr[i] = x;
+        sum[i] = arr[i];
+        if(i){
+            sum[i] = mod_add(sum[i - 1], sum[i]);
         }
     }
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    int p = (n * (n - 1)) / 2;
+    int inv_p = pwr(p,mod-2);
+
+    int ans = 0ll;
+    for (int i = 0; i < n; i++){
+        int suffix_sum = (sum[n - 1] - sum[i] + mod)%mod;
+        int cur = mod_mul(arr[i], suffix_sum);
+        ans = mod_add(ans, cur);
+        ans %= mod;
     }
-    cout << endl;
+    ans = mod_mul(ans, inv_p);
+    output(ans);
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

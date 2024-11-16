@@ -74,41 +74,40 @@ int pwr(int a, int b) {a %= mod; int res = 1; while (b > 0) {if (b & 1) res = (r
 int binaryToDecimal(string n) {string num = n; int dec_value = 0; int base = 1; int len = num.length(); for (int i = len - 1; i >= 0; i--) { if (num[i] == '1') dec_value += base; base = base * 2; } return dec_value;}
 string decToBinary(int n) {string s = ""; int i = 0; while (n > 0) {s = to_string(n % 2) + s; n = n / 2; i++;} return s;}
 
-void input(vi &a)  {for (auto &x : a) {cin >> x;}}
-void output(vi &a) {for (auto &x : a) {cout << x << " ";} cout << endl;}
-void output(auto x) {cout << x << endl;}
-void getUnique(vi &a) {sort(a.begin(), a.end()); a.erase(unique(a.begin(), a.end()), a.end());}
 
-int stringToint(string &s) { int number = 0; for (auto ch : s) { number = (number * 10) + (ch - '0');} return number; }
-int  maxx(vi &a) { return (*max_element(a.begin(), a.end())); }
-int  minn(vi &a) { return (*min_element(a.begin(), a.end())); }
 
-bool isPalindrome(string s) {int n = s.size(); for (int i = 0; i < n; i++) {if (s[i] != s[n - i - 1]) {return false;}} return true;}
-bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 == 0 || n % 3 == 0)return false; for (int i = 5; i * i <= n; i = i + 6)if (n % i == 0 || n % (i + 2) == 0)return false; return true;}
-bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
-bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
-
-void solution()
-{
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
-        }
-    }
-
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
-    }
-    cout << endl;
+void solution(){
+   int n;
+   cin>>n;
+   vector<vector<int>> arr(n);
+   for(int i=0; i<n; i++){
+       for(int j=0; j<n; j++){
+           int x;
+           cin>>x;
+           arr[i].push_back(x);
+       }
+   }
+   
+   int ans = 0;
+   for(int i=0; i<n; i++){
+       for(int j=0; j<n; j++){
+           if(arr[i][j]<0){
+               int add = abs(arr[i][j]);
+               ans += add;
+               int x = max(i,j);
+               x = n-x;
+               for(int k=0; k<x; k++){
+                   arr[i+k][j+k]+=add;
+               }
+           }
+       }
+   }
+   cout<<ans<<endl;
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

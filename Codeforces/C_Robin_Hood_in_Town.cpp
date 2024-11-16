@@ -25,7 +25,7 @@ typedef  unordered_map<int, int> umii;
 typedef  map<int, int> mii;
 typedef  unordered_map<int, int> umll;
 typedef  map<int, int> mll;
-typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_update> pbds;
+typedef  tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 
 #define    all(v)         (v).begin(),(v).end()
 #define    all1(v)        (v).begin()+1,(v).end()
@@ -90,25 +90,69 @@ bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x
 
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+    int n;
+    cin >> n;
+    vi arr(n);
+    input(arr);
+
+    if (n == 1 or n==2) {
+        output(-1);
+        return;
+    }
+
+    int sum = accumulate(all(arr), 0ll);
+    int mx = maxx(arr);
+
+    int cnt = 0;
+    double avg = sum / (2.0 * n);
+    for (int i = 0; i < n; i++) {
+        if (arr[i]*1.0 < avg) {
+            cnt++;
         }
     }
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    if (cnt > (n / 2)) {
+        output(0);
+        return;
     }
-    cout << endl;
+
+    auto possible = [&](int m) -> bool
+    {
+        int s = sum + m;
+        avg = s / (2.0 * n);
+        cnt = 0;
+        bool f = true;
+        for (int i = 0; i < n; i++) {
+            int cur = arr[i];
+            if(arr[i]==mx and f){
+                cur += m;
+                f = false;
+            }
+            if (cur < avg) {
+                cnt++;
+            }
+        }
+        // cout << m << "->" << cnt << endl;
+        return cnt > (n / 2);
+
+    };
+
+    int l = 0, h = inf;
+    while ((h - l > 1)) {
+        int m = l + ((h - l) / 2);
+        if (possible(m)) {
+            h = m;
+        } else {
+            l = m;
+        }
+    }
+
+    output(h);
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

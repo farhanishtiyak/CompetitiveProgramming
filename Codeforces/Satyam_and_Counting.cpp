@@ -90,25 +90,39 @@ bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x
 
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
-        }
+    int n;
+    cin >> n;
+    vector<pii> arr;
+    map<int, int> x, y;
+    forf(i,n){
+        int a, b;
+        cin >> a >> b;
+        arr.pb(mkp(a, b));
+        x[a]++;
+        y[b]++;
     }
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    int ans = 0;
+
+    for(auto p : arr){
+        int xx = p.ff;
+        int yy = p.ss;
+
+        int m = x[xx] - 1;
+        int n = y[yy] - 1;
+        int cur = m * n;
+        if(cur){
+            ans += cur;
+        }
+        //ans += ((x[xx] - 1) * (y[yy] - 1));
     }
-    cout << endl;
+
+    output(ans);
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

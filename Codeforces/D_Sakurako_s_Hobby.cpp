@@ -25,7 +25,7 @@ typedef  unordered_map<int, int> umii;
 typedef  map<int, int> mii;
 typedef  unordered_map<int, int> umll;
 typedef  map<int, int> mll;
-typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_update> pbds;
+typedef  tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 
 #define    all(v)         (v).begin(),(v).end()
 #define    all1(v)        (v).begin()+1,(v).end()
@@ -88,27 +88,63 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
+
+
+
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
-        }
-    }
+	int n;
+	cin >> n;
+	vi arr;
+	for (int i = 0; i < n; i++) {
+		int x;
+		cin >> x;
+		x--;
+		arr.pb(x);
+	}
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
-    }
-    cout << endl;
+	string s;
+	cin >> s;
+
+	// output(arr);
+
+	vi ans(n, 0), parent(n), visited(n, 0);
+	iota(all(parent), 0);
+
+	for (int i = 0; i < n; i++) {
+		if (visited[i] == 1) {
+			continue;
+		}
+
+		if (i == arr[i]) {
+			ans[i] = (s[i] == '0');
+			visited[i] = 1;
+		}
+		else {
+			int nxt_ind = arr[i];
+			int cnt = (s[i] == '0');
+			int par = i;
+			while (nxt_ind != i) {
+				parent[nxt_ind] = par;
+				cnt += (s[nxt_ind] == '0');
+				visited[nxt_ind] = 1;
+				nxt_ind = arr[nxt_ind];
+			}
+			ans[i] = cnt;
+		}
+
+	}
+
+	for (int i = 0; i < n; i++){
+	    int par = parent[i];
+	    cout << ans[par] << " ";
+	}
+	cout << endl;
 }
 
 int32_t main()
 {
-    Sezar;
-    // tc(t) solution();
-    solution();
+	Sezar;
+	tc(t) solution();
+	// solution();
 }

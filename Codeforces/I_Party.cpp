@@ -90,20 +90,26 @@ bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x
 
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+    int n;
+    cin >> n;
+    vi arr(n);
+    input(arr);
+    forf(i,n){
+        if(arr[i]!=-1){
+            arr[i]--;
         }
     }
-
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    int ans = INT_MIN;
+    for(auto x : arr){
+        int temp = x,comp = 0;
+        while(temp!=-1){
+            temp = arr[temp];
+            comp++;
+        }
+        ans = max(ans, comp);
     }
-    cout << endl;
+    ans++;
+    output(ans);
 }
 
 int32_t main()

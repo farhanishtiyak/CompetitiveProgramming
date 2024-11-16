@@ -88,20 +88,105 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-void solution()
-{
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
-        }
+const int N = 1e6 + 10;
+
+// summation
+struct segmenttree {
+    int n;
+    vector<pii> st;
+
+    void init(int _n) {
+        this->n = _n;
+        st.resize(4 * n);
     }
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    void build(int start, int ending, int node, vector<int> &v) {
+        // leaf node base case
+        if (start == ending) {
+            st[node] = mkp(v[start],v[start]);
+            return;
+        }
+
+        int mid = (start + ending) / 2;
+
+        // left subtree is (start,mid)
+        build(start, mid, 2 * node + 1, v);
+
+        // right subtree is (mid+1,ending)
+        build(mid + 1, ending, 2 * node + 2, v);
+
+        st[node].ff = min(st[node * 2 + 1].ff , st[node * 2 + 2].ff);
+        st[node].ss = max(st[node * 2 + 1].ss , st[node * 2 + 2].ss);
+    }
+
+    pii query(int start, int ending, int l, int r, int node) {
+        // non overlapping case
+        if (start > r || ending < l) {
+            return mkp(INT_MAX,INT_MIN);
+        }
+
+        // complete overlap
+        if (start >= l && ending <= r) {
+            return st[node];
+        }
+
+        // partial case
+        int mid = (start + ending) / 2;
+
+        pii q1 = query(start, mid, l, r, 2 * node + 1);
+        pii q2 = query(mid + 1, ending, l, r, 2 * node + 2);
+
+        pii ret;
+        ret.ff = min(q1.ff, q2.ff), ret.ss = max(q1.ss, q2.ss);
+        return ret;
+    }
+
+    
+
+    void build(vector<int> &v) {
+        build(0, n - 1, 0, v);
+    }
+
+    pii query(int l, int r) {
+        return query(0, n - 1, l, r, 0);
+    }
+
+};
+
+void solution()
+{
+    int n;
+    cin >> n;
+    vi arr(n);
+    input(arr);
+    map<int, vector<int>> indexs;
+    forf(i,n){
+        indexs[arr[i]].pb(i);
+    }
+
+    segmenttree tree;
+    tree.init(n);
+    tree.build(arr);
+
+    int q;
+    cin >> q;
+    while(q--){
+        int l, r;
+        cin >> l >> r;
+        l--;
+        r--;
+        pii ans = tree.query(l, r);
+        if(ans.ff == ans.ss)
+            cout << "-1 -1" << endl;
+        else{
+            auto it = indexs.find(ans.ff);
+            int lb = *(lower_bound(it->ss.begin(), it->ss.end(), l));
+            it = indexs.find(ans.ss);
+            int ub = *(lower_bound(it->ss.begin(), it->ss.end(), l));
+            if(lb>ub)
+                swap(lb, ub);
+            cout << lb + 1 << " " << ub + 1 << endl;
+        }
     }
     cout << endl;
 }
@@ -109,6 +194,6 @@ void solution()
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

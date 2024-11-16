@@ -88,22 +88,36 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-void solution()
-{
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+long long numberOfDivisors(long long num) {
+    long long total = 1;
+    for (int i = 2; (long long)i * i <= num; i++) {
+        if (num % i == 0) {
+            int e = 0;
+            do {
+                e++;
+                num /= i;
+            } while (num % i == 0);
+            total *= e + 1;
         }
     }
-
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    if (num > 1) {
+        total *= 2;
     }
-    cout << endl;
+    return total;
+}
+
+void solution()
+{
+    int a, b, n;
+    cin >> a >> b >> n;
+    int ans = 0;
+    for (int i = a; i <= b; i++){
+        int x = numberOfDivisors(i);
+        if(x==n){
+            ans++;
+        }
+    }
+    output(ans);
 }
 
 int32_t main()

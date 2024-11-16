@@ -19,7 +19,7 @@ typedef  pair<int, int> pii;
 typedef  pair<int, int> pll;
 typedef  vector<int> vi;
 typedef  vector<int> vll;
-typedef  vector<pll> vpll;
+typedef  vector<pll> ansll;
 typedef  vector<string> vs;
 typedef  unordered_map<int, int> umii;
 typedef  map<int, int> mii;
@@ -90,18 +90,27 @@ bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x
 
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+    int n, a, b, draw = 0;
+    cin >> n >> a >> b;
+    vector<pii> ans(n);
+    ans[0].first = a, ans[n - 1].second = b;
+    for (int i = 0; i < n; i++)
+    {
+        if (ans[i].first == 0 && ans[i].second == 0){
+            if (ans[0].first > 1){
+                ans[i].first++;
+                ans[0].first--;
+            }
+            else if (ans[n - 1].second > 1){
+                ans[i].second++;
+                ans[n - 1].second--;
+            }
         }
+        if (ans[i].first == ans[i].second)    draw++;
     }
-
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    output(draw);
+    for (auto x : ans){
+        cout << x.first << ':' << x.second << endl;
     }
     cout << endl;
 }

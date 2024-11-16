@@ -88,27 +88,59 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
-void solution()
-{
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+int check(string x){
+    int cnt = 0;
+    for(auto c : x){
+        if(c=='A'){
+            cnt++;
         }
     }
-
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    if(cnt>=2){
+        return 1;
+    }else{
+        return 0;
     }
-    cout << endl;
 }
+
+
+void solution()
+{
+    int n;
+    cin >> n;
+    string s, t;
+    cin >> s >> t;
+    int ans = 0;
+    
+    for (int i = 0; i < n; i += 3) {
+        int cur = 0;
+
+        string x = string(1, s[i]) + s[i + 1] + s[i + 2];
+        string y = string(1, t[i]) + t[i + 1] + t[i + 2];
+        int cnt = check(x) + check(y);
+        cur = max(cur, cnt);
+
+        x = string(1, s[i]) + t[i] + t[i + 1];
+        y = string(1, s[i + 1]) + s[i + 2] + t[i + 2];
+        cnt = check(x) + check(y);
+        cur = max(cur, cnt);
+
+        x = string(1, s[i]) + s[i + 1] + t[i];
+        y = string(1, t[i + 1]) + s[i + 2] + t[i + 2];
+        cnt = check(x) + check(y);
+        cur = max(cur, cnt);
+
+        // cout << "cur: " << cur << endl;
+
+        ans += cur;
+    }
+
+    output(ans);
+}
+
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

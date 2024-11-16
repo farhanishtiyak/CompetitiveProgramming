@@ -25,7 +25,7 @@ typedef  unordered_map<int, int> umii;
 typedef  map<int, int> mii;
 typedef  unordered_map<int, int> umll;
 typedef  map<int, int> mll;
-typedef  tree<int, null_type, less<int>, rb_tree_tag,tree_order_statistics_node_update> pbds;
+typedef  tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
 
 #define    all(v)         (v).begin(),(v).end()
 #define    all1(v)        (v).begin()+1,(v).end()
@@ -90,25 +90,48 @@ bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x
 
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+    int b, c, d;
+    cin >> b >> c >> d;
+
+    vi ans;
+    for (int i = 0; i <= 61; i++) {
+        int x = (b >> i) & 1;
+        int y = (c >> i) & 1;
+        int z = (d >> i) & 1;
+
+        if (x == 0 and y == 0 and z == 0) {
+            ans.pb(0);
+        } else if (x == 0 and y == 0 and z == 1) {
+            ans.pb(1);
+        } else if (x == 0 and y == 1 and z == 0) {
+            ans.pb(1);
+        } else if (x == 0 and y == 1 and z == 1) {
+            output(-1);
+            return;
+        } else if (x == 1 and y == 0 and z == 0) {
+            output(-1);
+            return;
+        } else if (x == 1 and y == 0 and z == 1) {
+            ans.pb(1);
+        } else if (x == 1 and y == 1 and z == 0) {
+            ans.pb(1);
+        } else {
+            ans.pb(0);
         }
     }
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
+    int x = 0ll;
+    for (int i = 0; i <= 60; i++) {
+        if (ans[i] == 1) {
+            x |= (1 << i);
+        }
     }
-    cout << endl;
+    output(x);
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }

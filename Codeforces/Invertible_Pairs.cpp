@@ -88,27 +88,55 @@ bool isPrime(int n) {if (n <= 1)return false; if (n <= 3)return true; if (n % 2 
 bool isPowerOfTwo(int n) {if (n == 0)return false; return (ceil(log2(n)) == floor(log2(n)));}
 bool isPerfectSquare(int x) {if (x >= 0) {int sr = sqrt(x); return (sr * sr == x);} return false;}
 
+int kadane(vi &arr){
+    int ms = INT_MIN, cs = INT_MIN;
+    for(auto x : arr){
+        cs = max(cs + x, x);
+        ms = max(ms, cs);
+    }
+    return ms;
+}
+
+
 void solution()
 {
-    string s;
-    cin >> s;
-    int ind = 0;
-    for (int i = 0; i < s.size(); i++){
-        if(s[i]=='a'){
-            ind = i;
-            break;
+    int n;
+    cin >> n;
+    vi arr(n);
+    input(arr);
+
+    vi temp = arr;
+    for (int i = 0; i < n; i+=2){
+        if(arr[i]>0 and arr[i+1]>0){
+            continue;
+        }else if(arr[i]<0 and arr[i+1]<0){
+            arr[i] *= (-1);
+            arr[i + 1] *= (-1);
+        }else{
+            if(arr[i]>0 and arr[i]>abs(arr[i+1])){
+                continue;
+            }else if(arr[i+1]>0 and arr[i+1]>abs(arr[i])){
+                continue;
+            }else{
+                arr[i] *= (-1);
+                arr[i + 1] *= (-1);
+            }
         }
     }
+    // output(arr);
+    int ans = kadane(arr);
 
-    for (int i = ind; i < s.size(); i++){
-        cout << s[i];
-    }
-    cout << endl;
+    vi cur = arr;
+    cur[0] = temp[0] * (-1);
+    cur[1] = temp[1] * (-1);
+    ans = max(ans, kadane(cur));
+
+    cout << ans << endl;
 }
 
 int32_t main()
 {
     Sezar;
-    // tc(t) solution();
-    solution();
+    tc(t) solution();
+    // solution();
 }
